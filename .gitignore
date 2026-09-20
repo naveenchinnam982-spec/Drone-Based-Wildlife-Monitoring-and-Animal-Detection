@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Output / generated runtime folders (keep folder structure, exclude dynamic files)
+uploads/*
+!uploads/.gitkeep
+results/*
+!results/.gitkeep
+
+# Large temporary models / experimental weights (>100MB exceeds GitHub push limits)
+weights/
+yolov8s-worldv2.pt
+yolo11s.pt
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+
+# Logs and runtime artifacts
+*.log

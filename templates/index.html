@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone-Based Wildlife Monitoring & Animal Detection</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Top Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-drone-front"></i>
+                    <i class="fa-solid fa-leaf badge-icon"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Drone-Based Wildlife Monitoring</h1>
+                    <p>AI-Powered Giraffe Detection using YOLO11</p>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i> Dashboard
+                </a>
+                <a href="#detect" class="nav-item" data-tab="detect">
+                    <i class="fa-solid fa-crosshairs"></i> Detect Animal
+                </a>
+                <a href="#history" class="nav-item" data-tab="history">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Detection History
+                </a>
+                <a href="#about" class="nav-item" data-tab="about">
+                    <i class="fa-solid fa-circle-info"></i> About Project
+                </a>
+            </nav>
+            <div class="nav-status">
+                <span class="status-indicator-dot"></span>
+                <span class="status-text">YOLO11s Online</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        
+        <!-- DASHBOARD STATS SECTION -->
+        <section id="dashboard" class="content-section active">
+            <div class="section-header">
+                <h2>System Overview</h2>
+                <p>Real-time telemetry and aggregated drone detection analytics</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon icon-blue">
+                        <i class="fa-solid fa-images"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Images Analyzed</span>
+                        <h3 id="stat-total-images">0</h3>
+                        <span class="stat-sub">Processed aerial frames</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-green">
+                        <i class="fa-solid fa-shield-cat"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Giraffes Detected</span>
+                        <h3 id="stat-total-giraffes">0</h3>
+                        <span class="stat-sub">Identified individuals</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-emerald">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Average Confidence</span>
+                        <h3 id="stat-avg-confidence">0.0%</h3>
+                        <span class="stat-sub">AI Precision metric</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-amber">
+                        <i class="fa-solid fa-satellite-dish"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Last Detection</span>
+                        <h3 id="stat-last-detection">None</h3>
+                        <span class="stat-sub" id="stat-last-time">No activity yet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Action Banner -->
+            <div class="action-banner">
+                <div class="banner-content">
+                    <div class="banner-badge"><i class="fa-solid fa-bolt"></i> Ready for Inference</div>
+                    <h3>Start Aerial Drone Image Analysis</h3>
+                    <p>Upload high-resolution UAV imagery to instantly identify and count wild giraffes using your custom YOLO11s model.</p>
+                </div>
+                <button class="btn btn-primary btn-lg" onclick="switchTab('detect')">
+                    <i class="fa-solid fa-camera"></i> Launch Detection Portal
+                </button>
+            </div>
+        </section>
+
+        <!-- IMAGE DETECTION PAGE / SECTION -->
+        <section id="detect" class="content-section">
+            <div class="section-header">
+                <h2>Real-Time Giraffe Detection</h2>
+                <p>Upload aerial drone image files for YOLO11 Object Detection</p>
+            </div>
+
+            <div class="detection-container">
+                <!-- Curated Sample Drone Imagery Section -->
+                <div class="card sample-imagery-card">
+                    <div class="sample-header">
+                        <div class="sample-title-wrapper">
+                            <div class="sample-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            <div>
+                                <h3>Curated Aerial Drone Imagery</h3>
+                                <p>Select any UAV test frame below to instantly load and run YOLO11s detection:</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-sample"><i class="fa-solid fa-satellite"></i> 5 Real Drone Samples</span>
+                    </div>
+                    <div class="sample-grid" id="sample-cards-grid">
+                        <div class="sample-chip active" data-sample="sample_herd_7.jpg" data-name="Savanna Herd (7 Giraffes)" data-count="7">
+                            <div class="chip-thumb-wrapper">
+                                <img src="/static/samples/sample_herd_7.jpg" alt="Savanna Herd">
+                                <span class="chip-badge badge-green"><i class="fa-solid fa-check"></i> 7 Giraffes</span>
+                            </div>
+                            <div class="chip-info">
+                                <strong>Savanna Herd</strong>
+                                <span>Dense savanna group</span>
+                            </div>
+                        </div>
+                        <div class="sample-chip" data-sample="sample_group_4.jpg" data-name="Acacia Bushveld (4 Giraffes)" data-count="4">
+                            <div class="chip-thumb-wrapper">
+                                <img src="/static/samples/sample_group_4.jpg" alt="Acacia Bushveld">
+                                <span class="chip-badge badge-green"><i class="fa-solid fa-check"></i> 4 Giraffes</span>
+                            </div>
+                            <div class="chip-info">
+                                <strong>Acacia Bushveld</strong>
+                                <span>High confidence (76%)</span>
+                            </div>
+                        </div>
+                        <div class="sample-chip" data-sample="sample_cluster_6.jpg" data-name="Aerial Cluster (6 Giraffes)" data-count="6">
+                            <div class="chip-thumb-wrapper">
+                                <img src="/static/samples/sample_cluster_6.jpg" alt="Aerial Cluster">
+                                <span class="chip-badge badge-green"><i class="fa-solid fa-check"></i> 6 Giraffes</span>
+                            </div>
+                            <div class="chip-info">
+                                <strong>Aerial Cluster</strong>
+                                <span>Top-down UAV scan</span>
+                            </div>
+                        </div>
+                        <div class="sample-chip" data-sample="sample_pair_2.jpg" data-name="Open Range Pair (2 Giraffes)" data-count="2">
+                            <div class="chip-thumb-wrapper">
+                                <img src="/static/samples/sample_pair_2.jpg" alt="Open Range Pair">
+                                <span class="chip-badge badge-green"><i class="fa-solid fa-check"></i> 2 Giraffes</span>
+                            </div>
+                            <div class="chip-info">
+                                <strong>Open Range Pair</strong>
+                                <span>Savanna grassland</span>
+                            </div>
+                        </div>
+                        <div class="sample-chip" data-sample="sample_landscape_0.jpg" data-name="Empty Savanna (Control)" data-count="0">
+                            <div class="chip-thumb-wrapper">
+                                <img src="/static/samples/sample_landscape_0.jpg" alt="Empty Savanna">
+                                <span class="chip-badge badge-gray">Control (0)</span>
+                            </div>
+                            <div class="chip-info">
+                                <strong>Empty Savanna</strong>
+                                <span>Negative control test</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drop Zone & File Selector -->
+                <div class="card upload-card">
+                    <div class="upload-area" id="drop-zone">
+                        <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp,image/jpg" hidden>
+                        <div class="upload-icon-wrapper">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <h3>Upload Custom Drone Image</h3>
+                        <p class="upload-hint">Drag & drop your imagery here, choose a file, or click any sample above</p>
+                        <div class="format-tags">
+                            <span class="tag">JPG</span>
+                            <span class="tag">JPEG</span>
+                            <span class="tag">PNG</span>
+                            <span class="tag">WEBP</span>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-secondary" onclick="document.getElementById('file-input').click()">
+                                <i class="fa-solid fa-folder-open"></i> Choose Image
+                            </button>
+                            <button class="btn btn-primary" id="btn-detect" disabled>
+                                <i class="fa-solid fa-microchip"></i> Detect Giraffe
+                            </button>
+                        </div>
+
+                        <!-- Sensitivity & Precision Threshold Controls -->
+                        <div class="threshold-controls">
+                            <div class="control-header">
+                                <label for="conf-slider"><i class="fa-solid fa-sliders"></i> Confidence Threshold:</label>
+                                <span class="conf-badge" id="conf-val-display">28% (Optimal)</span>
+                            </div>
+                            <input type="range" id="conf-slider" min="15" max="80" value="28" step="1" class="custom-slider">
+                            <div class="slider-labels">
+                                <span>15% (High Sensitivity)</span>
+                                <span>28% (Optimal Accuracy)</span>
+                                <span>80% (Strict)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Image Preview Before Detection -->
+                    <div class="preview-area hidden" id="preview-container">
+                        <div class="preview-header">
+                            <span><i class="fa-solid fa-file-image"></i> Selected File Preview</span>
+                            <button class="btn-icon" id="btn-clear-preview" title="Remove file">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="preview-image-wrapper">
+                            <img id="image-preview" src="" alt="Drone Image Preview">
+                        </div>
+                        <div class="file-meta">
+                            <span id="preview-filename">filename.jpg</span>
+                            <span id="preview-filesize">0 KB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detection Spinner Overlay -->
+                <div class="loading-overlay hidden" id="loading-spinner">
+                    <div class="spinner-box">
+                        <div class="pulse-ring"></div>
+                        <i class="fa-solid fa-microchip spinner-icon"></i>
+                        <h4>Running YOLO11s Inference...</h4>
+                        <p>Scanning drone imagery for wild giraffes at 640px resolution</p>
+                    </div>
+                </div>
+
+                <!-- RESULTS DISPLAY PANEL -->
+                <div class="results-wrapper hidden" id="results-container">
+                    
+                    <!-- Side-by-side Image Comparison Panels -->
+                    <div class="comparison-grid">
+                        <div class="card image-panel">
+                            <div class="panel-header">
+                                <span><i class="fa-solid fa-image"></i> Original Image</span>
+                                <span class="badge badge-neutral">Input</span>
+                            </div>
+                            <div class="panel-body">
+                                <img id="res-original-img" src="" alt="Original Drone Image">
+                            </div>
+                        </div>
+
+                        <div class="card image-panel highlight-panel">
+                            <div class="panel-header">
+                                <span><i class="fa-solid fa-object-group"></i> AI Detection Result</span>
+                                <span class="badge badge-success"><i class="fa-solid fa-check"></i> YOLO Bounding Boxes</span>
+                            </div>
+                            <div class="panel-body">
+                                <img id="res-annotated-img" src="" alt="YOLO Annotated Output">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics & Details Card -->
+                    <div class="card metrics-card">
+                        <div class="metrics-header">
+                            <h3><i class="fa-solid fa-square-poll-vertical"></i> Detection Metrics & Findings</h3>
+                            <div class="action-buttons">
+                                <button class="btn btn-outline" id="btn-view-full">
+                                    <i class="fa-solid fa-expand"></i> View Full Image
+                                </button>
+                                <a id="btn-download-res" href="#" download="giraffe_detection_result.jpg" class="btn btn-primary">
+                                    <i class="fa-solid fa-download"></i> Download Result
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="metrics-grid">
+                            <div class="metric-item">
+                                <span class="m-label">Detected Animal</span>
+                                <span class="m-value" id="res-animal">Giraffe</span>
+                            </div>
+                            <div class="metric-item highlight">
+                                <span class="m-label">Number of Giraffes</span>
+                                <span class="m-value count-badge" id="res-count">0</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="m-label">Average Confidence</span>
+                                <span class="m-value" id="res-confidence">0.0%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="m-label">Detection Status</span>
+                                <span class="status-pill" id="res-status">No Giraffe Detected</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="m-label">Processing Time</span>
+                                <span class="m-value" id="res-time">0.00 seconds</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Individual Giraffe Detections Breakdown Card -->
+                    <div class="card detections-breakdown-card" id="detections-breakdown-card">
+                        <div class="breakdown-header">
+                            <h4><i class="fa-solid fa-list-check"></i> Individual Detected Individuals Breakdown</h4>
+                            <span class="badge badge-neutral" id="breakdown-total-badge">0 Giraffes</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="detections-table">
+                                <thead>
+                                    <tr>
+                                        <th>Target ID</th>
+                                        <th>Classification</th>
+                                        <th>Confidence Score</th>
+                                        <th>Bounding Box Coordinates (px)</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detections-table-body">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- DETECTION HISTORY SECTION -->
+        <section id="history" class="content-section">
+            <div class="section-header flex-between">
+                <div>
+                    <h2>Detection History</h2>
+                    <p>Logs of previous drone image analyses and model predictions</p>
+                </div>
+                <button class="btn btn-danger" id="btn-clear-history">
+                    <i class="fa-solid fa-trash-can"></i> Clear History
+                </button>
+            </div>
+
+            <div class="card history-card">
+                <div class="table-responsive">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Image File</th>
+                                <th>Giraffe Count</th>
+                                <th>Avg Confidence</th>
+                                <th>Result Preview</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="empty-state" id="history-empty">
+                    <i class="fa-solid fa-box-open"></i>
+                    <p>No detection history recorded yet.</p>
+                    <button class="btn btn-secondary btn-sm" onclick="switchTab('detect')">Run your first detection</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT PROJECT SECTION -->
+        <section id="about" class="content-section">
+            <div class="section-header">
+                <h2>About Project</h2>
+                <p>Technical details, AI architecture, and dataset specifications</p>
+            </div>
+
+            <div class="about-grid">
+                <div class="card about-main">
+                    <div class="about-hero">
+                        <i class="fa-solid fa-binoculars hero-icon"></i>
+                        <div>
+                            <h3>Drone-Based Wildlife Monitoring & Animal Detection</h3>
+                            <p>An automated computer vision system designed for monitoring wildlife habitats and counting wild animal populations using aerial unmanned aerial vehicle (UAV) imagery.</p>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h4>System Functionality & Workflow</h4>
+                    <p>The application runs real-time inference using a customized <strong>YOLO11s (You Only Look Once v11 small)</strong> deep neural network. Uploaded drone images are resized and evaluated by the neural network to identify target bounding boxes, assign class probabilities, and compute aggregate counts.</p>
+                    
+                    <div class="model-badge-box">
+                        <div class="badge-item">
+                            <span class="b-title">AI Engine</span>
+                            <span class="b-val">Ultralytics YOLO11s</span>
+                        </div>
+                        <div class="badge-item">
+                            <span class="b-title">Target Class</span>
+                            <span class="b-val">Giraffe (nc: 1)</span>
+                        </div>
+                        <div class="badge-item">
+                            <span class="b-title">Confidence Threshold</span>
+                            <span class="b-val">0.25 (25%)</span>
+                        </div>
+                        <div class="badge-item">
+                            <span class="b-title">Input Size</span>
+                            <span class="b-val">640 x 640 px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card about-side">
+                    <h3>Dataset Specifications</h3>
+                    <div class="dataset-info">
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-database"></i> Dataset Name:</span>
+                            <span class="info-val">Giraffe UAV Toolbox</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-folder-tree"></i> Train Path:</span>
+                            <code class="code-pill">../train/images</code>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-folder-tree"></i> Val Path:</span>
+                            <code class="code-pill">../valid/images</code>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-folder-tree"></i> Test Path:</span>
+                            <code class="code-pill">../test/images</code>
+                        </div>
+                    </div>
+
+                    <div class="yaml-box">
+                        <div class="yaml-title"><i class="fa-solid fa-file-code"></i> dataset.yaml Configuration</div>
+                        <pre><code>nc: 1
+names: ['giraffe']</code></pre>
+                    </div>
+
+                    <div class="info-box-note">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>The current model file <code>giraffe_best.pt</code> was specifically fine-tuned on aerial drone images for optimal top-down giraffe detection accuracy.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FULL IMAGE LIGHTBOX MODAL -->
+    <div class="modal hidden" id="image-modal">
+        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modal-title">AI Detection Result - Full Resolution</span>
+                <button class="btn-icon" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <img id="modal-image" src="" alt="Full Size Detection Result">
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Academic Project: Drone-Based Wildlife Monitoring & Animal Detection. Powered by YOLO11s & Flask.</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
