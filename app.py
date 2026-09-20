@@ -252,8 +252,10 @@ def get_samples():
     return jsonify({'success': True, 'samples': samples})
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
     print("\n" + "=" * 60)
-    print(" [*] DRONE WILDLIFE MONITORING APP RUNNING!")
-    print(" Access Dashboard at: http://127.0.0.1:5000")
+    print(f" [*] DRONE WILDLIFE MONITORING APP RUNNING ON PORT {port}!")
+    print(f" Access Dashboard at: http://127.0.0.1:{port} or http://localhost:{port}")
     print("=" * 60 + "\n")
-    app.run(host='127.0.0.1', port=5000, debug=False, threaded=True)
+    app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
+
